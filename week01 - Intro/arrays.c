@@ -1,19 +1,24 @@
 #include <stdio.h>
 
-void print_array(int array[]){
+void print_array(int array[], int length){
     int i;
-    int length = sizeof(array) / sizeof(array[0]);
+    printf("Length of array is %d\n", length);
     for (i = 0; i < length; i++){
-        printf("%d", array[i]);
+        printf("%d\n", array[i]);
     }
 }
 
 int main(){
     int list[] = {1, 3, 6, 0};
-    print_array(list);
+    int size = sizeof(list) / sizeof(list[0]);
+    
+    print_array(list, size);
 
     list[2] = 5;
-    print_array(list);
+    print_array(list, size);
+
+    list[0] = list[0] * 8;
+    print_array(list, size);
 
     return 0;
 }
