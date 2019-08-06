@@ -44,7 +44,13 @@ void node_print(node_t *head) {
 // post (return == NULL AND failed to allocate memory for new linked list node)
 //      OR (return == the new head of the list)
 node_t * node_add(node_t *head, person_t *person) {
-    // TODO: implement this
+    node_t *new = (node_t *)malloc(sizeof(node_t));
+    if (new == NULL){
+        return NULL;
+    }
+    new->person = person;
+    new->next = head;
+    return new;
 }
 
 // find person by name in list pointed to by head
@@ -52,14 +58,35 @@ node_t * node_add(node_t *head, person_t *person) {
 // post (return == NULL AND name not found) 
 //      OR (return == node with person named name)
 node_t * node_find_name(node_t *head, char *name) {
-    // TODO: implement this
+    for ( ; head != NULL; head = head->next){
+        if (strcmp(name, head->person->name) == 0){
+            return head;
+        }
+    }
+    return NULL;
 }
 
 // delete a person by name in list pointed to by head
 // pre: head != NULL
 // post: return == the new head of the list
 node_t * node_delete(node_t *head, char *name) {
-    // TODO: implement this
+    node_t *previos = NULL;
+    node_t *current = head;
+    while (current != NULL){
+        if (strcmp(name, current->person->name) == 0){
+            node_t *newhead = head;
+            if (previos == NULL){
+                newhead = current->next;
+            } else {
+                previos->next = current->next;
+            }
+            free(current);
+            return newhead;
+        }
+        previos = current;
+        current = current->next;
+    }
+    return head;
 }
 
 

@@ -33,7 +33,9 @@ struct htab {
 // post: (return == false AND allocation of table failed)
 //       OR (all buckets are null pointers)
 bool htab_init(htab_t *h, size_t n) {
-    // TODO: implement this function
+    h->size = n;
+    h->buckets = (item_t **)calloc(n, sizeof(item_t *));
+    return h->buckets != 0;
 }
 
 // The Bernstein hash function.
@@ -55,7 +57,7 @@ size_t htab_index(htab_t *h, char *key) {
 
 // Find pointer to head of list for key in hash table.
 item_t * htab_bucket(htab_t *h, char *key) {
-    // TODO: implement this function (uses htab_index())
+    return h->buckets[htab_index(h, key)];
 }
 
 // Find an item for key in hash table.
@@ -63,7 +65,12 @@ item_t * htab_bucket(htab_t *h, char *key) {
 // post: (return == NULL AND item not found)
 //       OR (strcmp(return->key, key) == 0)
 item_t * htab_find(htab_t *h, char *key) {
-    // TODO: implement this function
+    for (item_t *i = htab_bucket(h, key); i != NULL; i = i->next){
+        if (strcmp(i->key, key) == 0){
+            return i;
+        }
+    }
+    return NULL;
 }
 
 // Add a key with value to the hash table.
@@ -71,7 +78,17 @@ item_t * htab_find(htab_t *h, char *key) {
 // post: (return == false AND allocation of new item failed)
 //       OR (htab_find(h, key) != NULL)
 bool htab_add(htab_t *h, char *key, int value) {
-    // TODO: implement this function
+    item_t *newhead = (item_t *)malloc(sizeof(item_t));
+    if (newhead == NULL){
+        return false;
+    }
+    newhead->key;
+    newhead->value;
+
+    size_t bucket = htab_index(h, key);
+    newhead->next = h->buckets[bucket];
+    h->buckets[bucket] = newhead;
+    return true;
 }
 
 // Print the hash table.
@@ -121,7 +138,17 @@ void htab_delete(htab_t *h, char *key) {
 // pre: htab_init(h)
 // post: all memory for hash table is released
 void htab_destroy(htab_t *h) {
-    // TODO: implement this function
+    for (size_t i = 0; i < h->size; i++){
+        item_t *bucket = h->buckets[i];
+        while (bucket != NULL){
+            item_t *next = bucket->next;
+            free(bucket);
+            bucket = next;
+        }
+    }
+    free(h->buckets);
+    h->buckets = NULL;
+    h->size = 0;
 }
 
 int main(int argc, char **argv) {

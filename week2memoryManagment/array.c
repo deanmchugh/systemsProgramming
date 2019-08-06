@@ -31,7 +31,7 @@ int main(int argc, char **argv) {
    }
 
    printf("\n\nIterate over text array and print characters by incrementing pointer...\n");
-   int *ptr = text;
+   char *ptr = text;
    for (i = 0; i < TEXT_SIZE; ++i){
       printf("%c", *ptr++);
    }
